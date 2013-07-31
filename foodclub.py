@@ -1,10 +1,12 @@
+#!/usr/bin/python
 import urllib2
 import re 
 from bs4 import BeautifulSoup
+from utils import printToConsole
+from grabber import IGrabber
 url_format = "http://www.foodclub.ru/detail/%s/"
 url = "http://www.foodclub.ru/all/"
-def printToConsole(unicode_str):
-   print unicode_str.encode('866', errors="replace")
+
    
 def getFoodclubReceipes():
    page = urllib2.urlopen(url) 
