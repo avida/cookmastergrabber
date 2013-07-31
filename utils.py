@@ -1,9 +1,10 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 import sqlite3
+import sys
 
 def printToConsole(unicode_str):
-   print unicode_str.encode('866', errors="replace")
+   print unicode_str.encode(sys.stdin.encoding,"replace")
 
 def writetoFilewithHTMLHeader(body, filename):
       file = open(filename,"w")

@@ -35,8 +35,7 @@ if __name__ == '__main__':
       grb = PovarenokGrabber()
    elif module == 'foodclub':
       grb = FoodclubGrabber()
-   if module:
-
+   if grb:
       range = grb.getRange()
       range = range[ job_range[0]* len(range)/100 : job_range[1]* len(range)/100 ]
       db_name = module + '_'+'-'.join([str(x) for x in job_range ])  + '.db'
