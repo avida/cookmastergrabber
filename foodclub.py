@@ -3,7 +3,7 @@ import urllib2
 import re 
 from bs4 import BeautifulSoup
 from utils import printToConsole
-from grabber import IGrabber
+from grabber_common import IGrabber
 
 url_format = "http://www.foodclub.ru/detail/%s/"
 url = "http://www.foodclub.ru/all/"
@@ -90,14 +90,14 @@ class FoodclubGrabber(IGrabber):
          displayed_recepies.append(int(m.group(0)))
       recepies  = displayed_recepies + recepies
       return recepies
-
-grb = FoodclubGrabber()
-import random
-ID = random.choice( grb.getRange() )
-print ID
-if grb.doParse(ID):
-   printToConsole( grb.getCaption() )
-   for ing in grb.getIngridients():
-      printToConsole( "%s: %s" % (ing[0], ing[1] ) )
-   printToConsole ( "; ".join(grb.getCategory()))
+if __name__ == '__main__':
+   grb = FoodclubGrabber()
+   import random
+   ID = random.choice( grb.getRange() )
+   print ID
+   if grb.doParse(ID):
+      printToConsole( grb.getCaption() )
+      for ing in grb.getIngridients():
+         printToConsole( "%s: %s" % (ing[0], ing[1] ) )
+      printToConsole ( "; ".join(grb.getCategory()))
 

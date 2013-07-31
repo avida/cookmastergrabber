@@ -2,7 +2,7 @@
 import urllib2
 from bs4 import BeautifulSoup
 from utils import printToConsole
-from grabber import IGrabber
+from grabber_common import IGrabber
 url_format = "http://www.povarenok.ru/recipes/show/%s/"
 
 class PovarenokGrabber(IGrabber):
@@ -32,15 +32,14 @@ class PovarenokGrabber(IGrabber):
          soup = BeautifulSoup(page.read(), from_encoding="cp1251")
          if soup is None:
             print "error parsing html"
-            exit 
+            return 
          body = soup.find(id="print_body")
          if body is None:
             print "Page Not Foud"
-            exit
+            return
          self._caption = body.find("h1").getText()
          recipe = body.find(attrs={'class':'recipe-steps'})
          category = body.find(attrs={'class':'recipe-infoline'})
-         print category
          self._category = []
          for i in category.find_all('nobr'):
             self._category.append(i.getText())
@@ -66,17 +65,17 @@ class PovarenokGrabber(IGrabber):
       except urllib2.HTTPError as e :
          print str(e)
          return False
-
-grb = PovarenokGrabber()
-import random
-ID = random.choice( grb.getRange() )
-print ID
-if grb.doParse(ID):
-   print  grb.getUrl()
-   printToConsole( grb.getCaption() )
-   for ing in grb.getIngridients():
-      printToConsole( "%s: %s" % (ing[0], ing[1] ) )
-   printToConsole ( "; ".join(grb.getCategory()))
+if __name__ == '__main__':
+   grb = PovarenokGrabber()
+   import random
+   ID = random.choice( grb.getRange() )
+   print ID
+   if grb.doParse(ID):
+      print  grb.getUrl()
+      printToConsole( grb.getCaption() )
+      for ing in grb.getIngridients():
+         printToConsole( "%s: %s" % (ing[0], ing[1] ) )
+      printToConsole ( "; ".join(grb.getCategory()))
 
 
 
