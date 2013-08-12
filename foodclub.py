@@ -16,33 +16,24 @@ class FoodclubGrabber(IGrabber):
       self._url = None
       self._category = []
    def getRange(self):
-      return self.getFoodclubReceipes()
+      range = self.getFoodclubReceipes()
+      range.sort()
+      return range
    
    def doParse(self, id):
       receipe_url = url_format % id
       self._url = receipe_url
       page = urllib2.urlopen(receipe_url) 
       soup = BeautifulSoup(page.read())
-      file  = open("gc.html", "w")
       manual = soup.find(attrs={"class":"title"})
       manual =  manual.find_next_sibling("div")
-     
-      header = """
-      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-      """
-      file.write(header)
-      
       images = manual.find_all(attrs={"class":"image"})
       base_url = 'http://www.foodclub.ru/'
       for image in images:
          img = image.find("img")
          img['src']= base_url+img['src']
          image.replace_with(img)
-
-      file.write(str(manual))
       self._manual = manual
-      file.close
-      
       caption = soup.find(attrs={"class":"fn"}).getText()
       self._caption = caption
       self._category = []

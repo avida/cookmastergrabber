@@ -20,7 +20,6 @@ class RecipesDB (DB):
       if not VERSION_TABLE_NAME in self._existingTables:
          self.createTable(VERSION_TABLE_NAME, VERSION_FORMAT)
          self.insert( VERSION_TABLE_NAME, DB_VERSION, True  )
-         print "create version table"
       if not RECIPE_TABLE_NAME in self._existingTables:
          self.createTable(RECIPE_TABLE_NAME, RECIPE_FORMAT)
       if not INGRIDIENTS_TABLE_NAME in self._existingTables:
@@ -34,8 +33,12 @@ class RecipesDB (DB):
          key = ingridient[0]
          name = ingridient[1]
          self.ingridients[name] = key
-      print self._existingTables
-   
+      f = self.fetch( "select id from %s order by id DESC limit 1" % RECIPE_TABLE_NAME )
+      self._greatesID = f[0][0] if len(f) else 0
+
+   def getGreatestID(self):
+      return self._greatesID
+
    def pushRecipe(self, id, caption, manual, ingridients, url, category):
       ingridients_ids = []
       amount_list = []
@@ -56,6 +59,7 @@ class RecipesDB (DB):
          LIST_SEPARATOR.join(category), 
          self._source )
       )
+      self._greatesID = id
 
    def getIngridientID(self, ingridient):
       if ingridient in self.ingridients:
