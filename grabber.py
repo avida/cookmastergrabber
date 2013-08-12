@@ -3,7 +3,7 @@
 import sys
 from foodclub import FoodclubGrabber
 from povarenok import PovarenokGrabber
-from utils import DB
+from recipes_db import RecipesDB
 
 def printHelp():
    print '''specify module name and range from 0 upto 100, for example:
@@ -38,11 +38,15 @@ if __name__ == '__main__':
    if grb:
       range = grb.getRange()
       range = range[ job_range[0]* len(range)/100 : job_range[1]* len(range)/100 ]
-      db_name = module + '_'+'-'.join([str(x) for x in job_range ])  + '.db'
-      db = DB(db_name)
+      db_name = module + '_'+'-'.join([str(x) for x in job_range ])  + '.sqlite'
+      db = RecipesDB(db_name, module)
       
-      print db_name
-      print range
-      
+      range = range[:15]
+      #range = [782]
+      for id in range:
+         print "parsing %d" % id
+         if grb.doParse(id):
+            db.pushRecipe(id, grb.getCaption(), grb.getManual(), grb.getIngridients(), grb.getUrl(), grb.getCategory())
+      db.commit()
    else:
       printHelp()  
