@@ -32,13 +32,15 @@ def grabSite(grb, module, j_range):
       for id in range:
          if done:
             break
+         if id <= db.getGreatestID():
+            recipes_left-=1
+            continue
          print "parsing %d from %s, %d left" % (id, module, recipes_left)
          recipes_left-=1
-         if id <= db.getGreatestID():
-            continue
          if grb.doParse(id):
             db.pushRecipe(id, grb.getCaption(), grb.getManual(), grb.getIngridients(), grb.getUrl(), grb.getCategory())
-            time.sleep(5)
+         time.sleep(5)
+         
          
       db.commit()
       print "thread %s exited" % module
@@ -75,10 +77,13 @@ try:
       t.start()
    while(True):
       time.sleep(10)
+      threads_done = True
       for t in threads:
          if t.isAlive():
-            continue
-      break
+            threads_done = False
+            break
+      if threads_done:   
+         break
 except KeyboardInterrupt:
    import signal
    signal.signal(signal.SIGINT,signal.SIG_IGN)
