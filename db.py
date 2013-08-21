@@ -4,7 +4,7 @@ import sqlite3
 import re
 from utils import printToConsole
 
-WRITE_QUEUE_LIMIT = 150
+WRITE_QUEUE_LIMIT = 10
 class DB:
    _db = None
    _c =  None
