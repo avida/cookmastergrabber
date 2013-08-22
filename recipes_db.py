@@ -67,6 +67,12 @@ class RecipesDB (DB):
          self._source )
       )
       self._greatesID = id
+   def getRecipeIDs(self):
+      f = self.fetch("select id from %s" % RECIPE_TABLE_NAME )
+      list = []
+      for item in f:
+         list.append(item[0])
+      return list
 
    def getRecipe(self, id):
       f = self.fetch(RECIPE_FETCH_QUERY + " where id=%d" % id)
